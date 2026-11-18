@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第五人格双转盘</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>🎡 第五人格双转盘</h1>
+<div class="mode-bar">
+  <button class="mode-btn" id="modeToggle">🎭 卧底模式</button>
+</div>
+<div class="wrap">
+
+<!-- 求生者 -->
+<div class="box">
+<h2>🧡 求生者</h2>
+<div class="sel"><h3>谁来玩？</h3><div class="btns" id="sP">
+<!-- 玩家名字由 JS 动态生成 -->
+</div></div>
+<div class="wc"><div class="pt" id="sPt"></div><svg class="wheel" id="sW" viewBox="0 0 340 340"></svg><div class="cen">开始!</div></div>
+<button class="go" id="sB">🎰 转一转</button><p class="tip">先选名字～</p>
+<div style="display:flex;gap:8px;margin-top:12px;">
+  <button class="edit-btn" style="flex:1;margin:0;" id="sEdit">⚙️ 编辑角色</button>
+  <button class="edit-btn" style="flex:1;margin:0;" onclick="editPlayers()">✏️ 改玩家名</button>
+</div>
+<div class="rec"><h3>📋 记录</h3><div id="sR"><p style="color:#999;text-align:center">暂无记录</p></div></div>
+</div>
+
+<!-- 天赋转盘 -->
+<div class="box talent-box">
+<h2>✨ 天赋转盘</h2>
+<div class="sel"><h3>谁来转？</h3><div class="btns" id="tP">
+<!-- 玩家名字由 JS 动态生成 -->
+</div></div>
+<div class="wc"><div class="pt" id="tPt"></div><svg class="wheel" id="tW" viewBox="0 0 340 340"></svg><div class="cen">开始!</div></div>
+<button class="go" id="tB">🎰 转一转</button><p class="tip">先选名字～</p>
+<div style="display:flex;gap:8px;margin-top:12px;">
+  <button class="edit-btn" style="flex:1;margin:0;" onclick="editPlayers()">✏️ 改玩家名</button>
+</div>
+<div class="rec"><h3>📋 记录</h3><div id="tR"><p style="color:#999;text-align:center">暂无记录</p></div></div>
+</div>
+
+<!-- 监管者 -->
+<div class="box">
+<h2>🖤 监管者</h2>
+<div class="sel"><h3>谁来玩？</h3><div class="btns" id="hP">
+<!-- 玩家名字由 JS 动态生成 -->
+</div></div>
+<div class="wc"><div class="pt" id="hPt"></div><svg class="wheel" id="hW" viewBox="0 0 340 340"></svg><div class="cen">开始!</div></div>
+<button class="go" id="hB">🎰 转一转</button><p class="tip">先选名字～</p>
+<div style="display:flex;gap:8px;margin-top:12px;">
+  <button class="edit-btn" style="flex:1;margin:0;" id="hEdit">⚙️ 编辑角色</button>
+  <button class="edit-btn" style="flex:1;margin:0;" onclick="editPlayers()">✏️ 改玩家名</button>
+</div>
+<div class="rec"><h3>📋 记录</h3><div id="hR"><p style="color:#999;text-align:center">暂无记录</p></div></div>
+</div>
+
+<!-- 监管挑战 -->
+<div class="box">
+<h2>💀 监管挑战</h2>
+<div class="sel"><h3>谁来挑战？</h3><div class="btns" id="cP">
+<!-- 玩家名字由 JS 动态生成 -->
+</div></div>
+<div class="wc"><div class="pt" id="cPt"></div><svg class="wheel" id="cW" viewBox="0 0 340 340"></svg><div class="cen">开始!</div></div>
+<button class="go" id="cB">🎰 抽挑战</button><p class="tip">先选名字～</p>
+<div style="display:flex;gap:8px;margin-top:12px;">
+  <button class="edit-btn" style="flex:1;margin:0;" id="cEdit">⚙️ 编辑挑战</button>
+  <button class="edit-btn" style="flex:1;margin:0;" onclick="editPlayers()">✏️ 改玩家名</button>
+</div>
+<div class="rec"><h3>📋 记录</h3><div id="cR"><p style="color:#999;text-align:center">暂无记录</p></div></div>
+</div>
+
+<!-- 卧底模式全家桶 -->
+<div class="box undercover-box" id="ucBox" style="display:none; width:100%; max-width:800px;">
+  <h2>🎭 卧底模式</h2>
+  <p class="uc-hint">指针指向 = 卧底 · 正对面 = 监管者</p>
+  
+  <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;">
+    <!-- 卧底/监管转盘 -->
+    <div style="flex:1;min-width:300px;text-align:center;">
+      <h3 style="color:#fff;margin-bottom:10px;">身份抽选</h3>
+      <div class="wc">
+        <div class="pt" id="ucPt"></div>
+        <svg class="wheel" id="ucW" viewBox="0 0 340 340"></svg>
+        <div class="cen">开始!</div>
+      </div>
+      <button class="go" id="ucB">🎰 抽卧底</button>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:center;">
+        <button class="edit-btn" style="margin:0;" id="ucEdit">⚙️ 编辑玩家</button>
+        <button class="edit-btn" style="margin:0;" onclick="editPlayers()">✏️ 改玩家名</button>
+      </div>
+    </div>
+
+    <!-- 抓人顺序转盘 -->
+    <div style="flex:1;min-width:300px;text-align:center;">
+      <h3 style="color:#fff;margin-bottom:10px;">监管先抓谁？</h3>
+      <div class="wc">
+        <div class="pt" id="targetPt"></div>
+        <svg class="wheel" id="targetW" viewBox="0 0 340 340"></svg>
+        <div class="cen">开始!</div>
+      </div>
+      <button class="go" id="targetB">🎯 抽取抓人顺序</button>
+      <p class="tip">每次抽出一名，直到四人全部排好序</p>
+      <div class="rec"><h3>📋 抓人顺序记录</h3><div id="targetR"><p style="color:#999;text-align:center">暂无记录</p></div></div>
+    </div>
+  </div>
+
+  <div class="vote-panel" id="votePanel" style="display:none">
+    <h3>🗳️ 投票环节</h3>
+    <p class="vote-sub" id="voteSub">先选你自己是谁</p>
+    <div class="vote-me" id="voteMe"></div>
+    <div class="vote-targets" id="voteTargets" style="display:none"></div>
+    <div class="vote-status" id="voteStatus"></div>
+  </div>
+</div>
+
+</div><!-- end wrap -->
+
+<!-- 结果弹窗 -->
+<div class="modal-mask" id="resultMask">
+  <div class="result-card" id="resultCard"></div>
+</div>
+
+<!-- 揭晓弹窗 -->
+<div class="reveal-mask" id="revealMask">
+  <div class="reveal-card" id="revealCard"></div>
+</div>
+
+<!-- 编辑角色池弹窗 -->
+<div class="pool-mask" id="poolMask">
+  <div class="pool-box">
+    <h3 id="poolTitle">编辑角色池</h3>
+    <p class="sub">点击切换选中 · 新增输入后回车</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="text" id="newPoolItem" placeholder="输入新角色名，回车添加" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;outline:none;">
+      <button class="btn" id="addPoolBtn" style="padding:0 16px;background:#764ba2;color:#fff;border:none;border-radius:8px;cursor:pointer;">添加</button>
+    </div>
+    <div class="pool-grid" id="poolGrid"></div>
+    <div class="pool-actions">
+      <button class="all" id="poolAll">全选</button>
+      <button class="ok" id="poolOk">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 背景设置 -->
+<button class="bg-toggle" id="bgToggle" title="背景设置">🖼️</button>
+<div class="bg-panel" id="bgPanel">
+  <h4>🎨 背景设置</h4>
+  <p class="sub">选个喜欢的背景，转盘依然是主角</p>
+  <div class="bg-section">
+    <div class="label">预设色卡</div>
+    <div class="preset-grid" id="presetGrid"></div>
+  </div>
+  <div class="bg-section">
+    <div class="label">自定义图片</div>
+    <label class="upload-btn" for="bgUpload">📁 上传本地图片</label>
+    <input type="file" id="bgUpload" accept="image/*" style="display:none">
+  </div>
+  <div class="bg-section">
+    <div class="label">遮罩强度 <span id="overlayVal">45%</span></div>
+    <input type="range" id="overlayRange" min="0" max="80" value="45">
+  </div>
+  <div class="switch-row">
+    <span class="txt">背景模糊</span>
+    <label class="switch"><input type="checkbox" id="blurToggle" checked><span class="slider"></span></label>
+  </div>
+  <div class="bg-actions">
+    <button class="reset" id="bgReset">↺ 恢复默认</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
